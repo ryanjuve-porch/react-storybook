@@ -30,7 +30,7 @@ if (program.staticDir) {
   const staticPath = path.resolve(program.staticDir);
   if (fs.existsSync(staticPath)) {
     logger.log(`=> Copying static files from: ${program.staticDir}`);
-    shelljs.cp('-r', staticPath + '/', outputDirPath);
+    shelljs.cp('-r', `${staticPath}/`, outputDirPath);
   } else {
     logger.error(`Error: no such directory to load static files: ${staticPath}`);
     process.exit(-1);
@@ -97,7 +97,7 @@ fs.writeFileSync(path.resolve(outputDirPath, 'iframe.html'), getIframeHtml());
 // TODO this section of the code needs to be verified
 //      by running with a few different scenarios.
 webpack(finalConfig).compile(function (err, stats) {
-  for (var filename in stats.assets) {
+  for (const filename in stats.assets) {
     if (!stats.assets.hasOwnProperty(filename)) {
       continue;
     }
@@ -106,13 +106,13 @@ webpack(finalConfig).compile(function (err, stats) {
     if (asset.children && asset.children.length) {
       // TODO learn more about "RawSource"
       const source = asset.children[0]._value;
-      const dstPath = path.resolve(outputDirPath, 'static/' + filename);
+      const dstPath = path.resolve(outputDirPath, `static/${filename}`);
       fs.writeFileSync(dstPath, source);
       continue;
     }
 
     const source = asset._value;
-    const dstPath = path.resolve(outputDirPath, 'static/' + filename);
+    const dstPath = path.resolve(outputDirPath, `static/${filename}`);
     fs.writeFileSync(dstPath, source);
   }
 });
